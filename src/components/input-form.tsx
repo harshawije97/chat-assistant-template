@@ -7,6 +7,25 @@ import RandomSuggestions from "./random-suggestions";
 import LLmModels from "./llm-models";
 
 function InputForm() {
+  const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
+  const placeholderRef = React.useRef<HTMLDivElement>(null);
+  const [input, setInput] = React.useState<string>("");
+
+  const handleInput = () => {
+    const element = textAreaRef.current;
+    if (element) {
+      element.style.height = "44px";
+      element.style.height = Math.min(element.scrollHeight, 305) + "px";
+    }
+  };
+
+  React.useEffect(() => {
+    const element = placeholderRef.current;
+    if (element) {
+      element.style.display = input === "" ? "block" : "none";
+    }
+  }, [input]);
+
   return (
     <div
       className="absolute bottom-0 mx-auto inset-x-0 w-full max-w-[51rem] @sm:relative flex flex-col items-center 
@@ -31,7 +50,11 @@ function InputForm() {
                 style={{ opacity: 1, transform: "none" }}
               ></div>
               <div className="relative z-10">
-                <span className="absolute px-2 @[480px]/input:px-3 py-5 text-neutral-400 pointer-events-none select-none">
+                <span
+                  ref={placeholderRef}
+                  className="absolute px-2 @[480px]/input:px-3 py-5 text-neutral-400 pointer-events-none select-none"
+                  style={{ display: "block" }}
+                >
                   What do you want to ask ?
                 </span>
                 <textarea
@@ -39,12 +62,15 @@ function InputForm() {
                   aria-label="Ask me a question"
                   name=""
                   id=""
+                  ref={textAreaRef}
+                  onInput={handleInput}
+                  onChange={(e) => setInput(e.target.value)}
                   style={{
                     resize: "none",
                     height: "44px !important",
+                    maxHeight: "305px",
                   }}
-                  className="w-full px-2 @[480px]/input:px-3 bg-transparent 
-                            focus:outline-none text-foreground align-bottom min-h-14 pt-5 my-0 mb-5"
+                  className="w-full px-2 @[480px]/input:px-3 bg-transparent focus:outline-none text-foreground align-bottom min-h-14 pt-5 my-0 mb-5 field-sizing-content"
                 ></textarea>
               </div>
               <div
