@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
@@ -5,18 +6,37 @@ import { Paperclip, SendHorizontal } from "lucide-react";
 import { Button } from "./ui/button";
 import RandomSuggestions from "./random-suggestions";
 import LLmModels from "./llm-models";
+import { useMessagesStore } from "@/lib/zustand/use-message-store";
 
-function InputForm() {
+interface InputFormProps {
+  isStartup: boolean;
+}
+
+function InputForm({ isStartup }: InputFormProps) {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
   const placeholderRef = React.useRef<HTMLDivElement>(null);
   const [input, setInput] = React.useState<string>("");
 
-  const handleInput = () => {
+  // message store
+  const { setMessages } = useMessagesStore();
+
+  const handleInput = (data: any) => {
     const element = textAreaRef.current;
     if (element) {
       element.style.height = "44px";
       element.style.height = Math.min(element.scrollHeight, 305) + "px";
     }
+    setInput(data.target.value);
+  };
+
+  const handleOnSubmit = (e: any) => {
+    e.preventDefault();
+    if (input === "") {
+      return;
+    } else {
+      setMessages(input, "user", "success");
+    }
+    setInput("");
   };
 
   React.useEffect(() => {
@@ -35,6 +55,7 @@ function InputForm() {
         <form
           className="bottom-0 relative z-10 items-center justify-center w-full mt-2 flex flex-col gap-2 text-base"
           data-id="1"
+          onSubmit={handleOnSubmit}
         >
           <div className="flex flex-row gap-2 justify-center w-full relative @xl:w-4/5">
             <input type="file" multiple className="hidden" />
@@ -60,11 +81,11 @@ function InputForm() {
                 <textarea
                   dir="auto"
                   aria-label="Ask me a question"
-                  name=""
-                  id=""
+                  name="textInput"
+                  id="textInput"
+                  value={input}
                   ref={textAreaRef}
                   onInput={handleInput}
-                  onChange={(e) => setInput(e.target.value)}
                   style={{
                     resize: "none",
                     height: "44px !important",
@@ -94,7 +115,7 @@ function InputForm() {
                     style={{
                       opacity: 1,
                     }}
-                    disabled
+                    disabled={input === ""}
                   >
                     <SendHorizontal />
                   </Button>
@@ -103,15 +124,17 @@ function InputForm() {
             </div>
           </div>
         </form>
-        <section className="w-full flex justify-center">
-          <div
-            className="z-10 w-full @xl:w-4/5 
+        {isStartup && (
+          <section className="w-full flex justify-center">
+            <div
+              className="z-10 w-full @xl:w-4/5 
                     no-touch-scrollbar will-change-[mask-image] @sm:[mask-image:none] min-h-10 max-w-[51rem] hidden @sm:block overflow-visible"
-          >
-            <div className="absolute bg-background w-full max-w-[51rem]"></div>
-            <RandomSuggestions />
-          </div>
-        </section>
+            >
+              <div className="absolute bg-background w-full max-w-[51rem]"></div>
+              <RandomSuggestions />
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
