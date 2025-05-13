@@ -6,6 +6,7 @@ import Navbar from "@/components/navbar";
 import OpenText from "@/components/open-text";
 import UserMessage from "@/components/user-message";
 import { assistantMsg } from "@/lib/test-message";
+import { Message } from "@/lib/types";
 import { useMessagesStore } from "@/lib/zustand/use-message-store";
 
 export default function Home() {
@@ -35,20 +36,34 @@ export default function Home() {
                 overflowAnchor: "none",
               }}
             >
-              <div className="relative w-full flex flex-col items-center pt-20 pb-4">
-                <div></div>
-                <div className="w-full max-w-[799px] flex flex-col">
-                  {/* User chat bubble */}
-                  <div>
-                    <UserMessage message="Hello, how are you?" />
+              {messages.length > 0 &&
+                messages.map((message: Message) => (
+                  <div
+                    key={message.id}
+                    className="relative w-full flex flex-col items-center pt-20 pb-4"
+                  >
+                    <div></div>
+                    <div className="w-full max-w-[799px] flex flex-col">
+                      {/* User chat bubble */}
+                      <div>
+                        <UserMessage
+                          message={message.message}
+                          role={message.role}
+                        />
+                      </div>
+                      {/* GPT chat bubble */}
+                      <div>
+                        <AssistantMessage
+                          message={assistantMsg}
+                          role="assistant"
+                        />
+                      </div>
+                      <div
+                        style={{ width: "100%", paddingBottom: "144px" }}
+                      ></div>
+                    </div>
                   </div>
-                  {/* GPT chat bubble */}
-                  <div>
-                    <AssistantMessage message={assistantMsg} />
-                  </div>
-                  <div style={{ width: "100%", paddingBottom: "144px" }}></div>
-                </div>
-              </div>
+                ))}
             </div>
             {/* Chat form */}
             <InputForm isStartup={false} />

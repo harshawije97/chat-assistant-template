@@ -6,11 +6,12 @@ import { Copy, Pencil } from "lucide-react";
 
 interface UserMessageProps {
   message: string;
+  role: string;
 }
 
-function UserMessage({ message }: UserMessageProps) {
+function UserMessage({ message, role }: UserMessageProps) {
   return (
-    <div className="relative group flex flex-col justify-center w-full max-w-3xl md:px-4 pb-2 gap-1 items-end">
+    <div role={role} className="relative group flex flex-col justify-center w-full max-w-3xl md:px-4 pb-2 gap-1 items-end">
       <div
         dir="auto"
         className="min-h-7 rounded-3xl break-words text-primary max-w-prose border px-4 py-2.5 max-w-[100%] sm:max-w-[90%] bg-primary/10"

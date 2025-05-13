@@ -6,11 +6,15 @@ import { Button } from "./ui/button";
 
 interface AssistantMessageProps {
   message: string;
+  role: string;
 }
 
-function AssistantMessage({ message }: AssistantMessageProps) {
+function AssistantMessage({ message, role }: AssistantMessageProps) {
   return (
-    <div className="relative group flex flex-col justify-center w-full max-w-3xl md:px-4 pb-2 gap-1 items-start">
+    <div
+      role={role}
+      className="relative group flex flex-col justify-center w-full max-w-3xl md:px-4 pb-2 gap-1 items-start"
+    >
       <div
         dir="auto"
         className="min-h-7 rounded-3xl break-words text-primary w-full max-w-none border-0 px-4 py-2.5 opacity-100"

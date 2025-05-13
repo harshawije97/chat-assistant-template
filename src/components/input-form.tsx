@@ -48,12 +48,12 @@ function InputForm({ isStartup }: InputFormProps) {
 
   return (
     <div
-      className="absolute bottom-0 mx-auto inset-x-0 w-full max-w-[51rem] @sm:relative flex flex-col items-center 
+      className="absolute bottom-1 mx-auto inset-x-0 w-full max-w-[51rem] @sm:relative flex flex-col items-center 
               justify-center gap-1 @sm:gap-4 @sm:bottom-auto @sm:inset-x-auto @sm:max-w-full"
     >
       <div className="flex flex-col-reverse items-center justify-between flex-1 w-full gap-0 @sm:gap-5 @sm:flex-col relative p-2 @sm:p-0">
         <form
-          className="bottom-0 relative z-10 items-center justify-center w-full mt-2 flex flex-col gap-2 text-base"
+          className="bottom-1 relative z-10 items-center justify-center w-full mt-2 flex flex-col gap-2 text-base"
           data-id="1"
           onSubmit={handleOnSubmit}
         >
