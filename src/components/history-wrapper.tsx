@@ -18,14 +18,16 @@ import {
   CommandList,
   CommandSeparator,
 } from "./ui/command";
-import { History } from "lucide-react";
+import { Button } from "./ui/button";
 
 function HistoryWrapper() {
   return (
     <>
       <Dialog>
-        <DialogTrigger>
-          <History />
+        <DialogTrigger asChild>
+          <Button>
+            
+          </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader hidden>

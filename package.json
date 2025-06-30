@@ -1,7 +1,9 @@
 {
-  "name": "chat-assistant-template",
-  "version": "0.1.0",
+  "name": "atlas-ai-studio-app",
+  "version": "0.1.2",
+  "author": "Leaptech Private Limited",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

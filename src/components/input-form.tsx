@@ -2,11 +2,12 @@
 "use client";
 
 import React from "react";
-import { Paperclip, SendHorizontal } from "lucide-react";
+import { SendHorizontal } from "lucide-react";
 import { Button } from "./ui/button";
 import RandomSuggestions from "./random-suggestions";
 import LLmModels from "./llm-models";
 import { useMessagesStore } from "@/lib/zustand/use-message-store";
+import UploadFiles from "./upload-files";
 
 interface InputFormProps {
   isStartup: boolean;
@@ -99,9 +100,7 @@ function InputForm({ isStartup }: InputFormProps) {
                         border-transparent p-3 @[480px]/input:p-2.5 max-w-full"
               >
                 {/* form footer */}
-                <Button className="rounded-full h-10" variant={"outline"}>
-                  <Paperclip />
-                </Button>
+                <UploadFiles />
                 <div className="flex grow gap-1.5 max-w-full">
                   <div></div>
                   <div></div>
