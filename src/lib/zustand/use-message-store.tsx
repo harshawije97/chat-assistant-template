@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { Message, MessageRole, MessageStatus } from "../types";
 import { MessagesStoreProps } from "../interfaces";
+import { Message, MessageRole, MessageStatus } from "@/utils/contracts";
 
 const now = new Date();
 

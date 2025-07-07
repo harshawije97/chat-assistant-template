@@ -3,13 +3,17 @@
 import React from "react";
 import { Copy, RefreshCcw, ThumbsDown, ThumbsUp } from "lucide-react";
 import { Button } from "./ui/button";
+import Markdown from "react-markdown";
+import ProcessingLoader from "./processing-loader";
+import { Status } from "@/utils/contracts";
 
 interface AssistantMessageProps {
   message: string;
   role: string;
+  status: string;
 }
 
-function AssistantMessage({ message, role }: AssistantMessageProps) {
+function AssistantMessage({ message, role, status }: AssistantMessageProps) {
   return (
     <div
       role={role}
@@ -25,7 +29,11 @@ function AssistantMessage({ message, role }: AssistantMessageProps) {
             className="break-words"
             style={{ whiteSpace: "pre-wrap" }}
           >
-            {message}
+            {status === Status.PENDING ? (
+              <ProcessingLoader />
+            ) : (
+              <Markdown>{message}</Markdown>
+            )}
           </p>
         </div>
       </div>

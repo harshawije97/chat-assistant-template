@@ -1,4 +1,4 @@
-import { Message, MessageRole, MessageStatus } from "./types";
+import { Message, MessageRole, MessageStatus } from "@/utils/contracts";
 
 export interface MessagesStoreProps {
     messages: Message[];

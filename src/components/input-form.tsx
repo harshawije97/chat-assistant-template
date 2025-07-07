@@ -8,6 +8,8 @@ import RandomSuggestions from "./random-suggestions";
 import LLmModels from "./llm-models";
 import { useMessagesStore } from "@/lib/zustand/use-message-store";
 import UploadFiles from "./upload-files";
+import { Status } from "@/utils/contracts";
+import { chatStreamAsync } from "@/api/chat-stream-async";
 
 interface InputFormProps {
   isStartup: boolean;
@@ -19,7 +21,7 @@ function InputForm({ isStartup }: InputFormProps) {
   const [input, setInput] = React.useState<string>("");
 
   // message store
-  const { setMessages } = useMessagesStore();
+  const { messages, setMessages, updateMessages } = useMessagesStore();
 
   const handleInput = (data: any) => {
     const element = textAreaRef.current;
@@ -30,14 +32,45 @@ function InputForm({ isStartup }: InputFormProps) {
     setInput(data.target.value);
   };
 
+  // set assistant message to store
+  const getAssistantMessage = async (message: string) => {
+    setInput("");
+
+    let final = "";
+
+    const id = setMessages("", "assistant", Status.PENDING);
+
+    try {
+      const response = await chatStreamAsync(
+        {
+          message: message,
+          history: messages,
+          namespace: "marketing",
+          role: "assistant",
+        },
+        (chunk: any) => {
+          final += chunk.data;
+
+          if (chunk.type === "text") {
+            updateMessages(id, { message: final, status: Status.RECEIVING });
+          }
+        }
+      );
+
+      if (response.success) {
+        console.log(response.message);
+        updateMessages(id, { status: Status.COMPLETE });
+      }
+    } catch (error) {
+      throw new Error(`API responded with status: ${error}`);
+    }
+  };
+
   const handleOnSubmit = (e: any) => {
     e.preventDefault();
-    if (input === "") {
-      return;
-    } else {
-      setMessages(input, "user", "success");
-    }
-    setInput("");
+    // set user message to store
+    setMessages(input, "user", Status.COMPLETE);
+    getAssistantMessage(input);
   };
 
   React.useEffect(() => {
