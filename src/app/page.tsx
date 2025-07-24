@@ -1,13 +1,10 @@
 "use client";
 
-import AssistantMessage from "@/components/assistant-message";
+import ContinueChat from "@/components/continue-chat";
 import InputForm from "@/components/input-form";
 import Navbar from "@/components/navbar";
 import OpenText from "@/components/open-text";
-import UserMessage from "@/components/user-message";
-import { cn } from "@/lib/utils";
 import { useMessagesStore } from "@/lib/zustand/use-message-store";
-import { Message } from "@/utils/contracts";
 
 export default function Home() {
   const { messages } = useMessagesStore();
@@ -19,7 +16,9 @@ export default function Home() {
           <div className="w-full relative @container/nav z-40">
             <Navbar />
           </div>
-          {messages.length < 1 && (
+          {messages.length > 1 ? (
+            <ContinueChat />
+          ) : (
             <div className="w-full h-full flex flex-col items-center p-2 mx-auto justify-center @sm:p-4 @sm:gap-9 @xl:w-4/5 isolate">
               <div className="flex flex-col items-center gap-6 @sm:gap-9 h-[450px] w-full @sm:pt-12 isolate">
                 <OpenText />
@@ -28,54 +27,6 @@ export default function Home() {
               </div>
             </div>
           )}
-          <div className="relative flex flex-col items-center h-full @container/main">
-            <div
-              className="w-full h-full overflow-y-auto overflow-x-hidden flex flex-col items-center px-5"
-              style={{
-                scrollbarGutter: "stable both-edges",
-                overflowAnchor: "none",
-              }}
-            >
-              {messages.length > 0 &&
-                messages.map((message: Message) => (
-                  <div
-                    key={message.id}
-                    className={cn(
-                      message.role === "assistant" ? "py-1" : "pt-20 pb-4",
-                      "relative w-full flex flex-col items-center"
-                    )}
-                  >
-                    <div></div>
-                    <div className="w-full max-w-[799px] flex flex-col">
-                      {/* User chat bubble */}
-                      <div>
-                        {message.role === "user" && (
-                          <UserMessage
-                            message={message.message}
-                            role={message.role}
-                          />
-                        )}
-                      </div>
-                      {/* GPT chat bubble */}
-                      <div>
-                        {message.role === "assistant" && (
-                          <AssistantMessage
-                            message={message.message}
-                            role={message.role}
-                            status={message.status}
-                          />
-                        )}
-                      </div>
-                      <div
-                        style={{ width: "100%", paddingBottom: "144px" }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-            {/* Chat form */}
-            <InputForm isStartup={false} />
-          </div>
         </main>
       </div>
     </div>

@@ -21,7 +21,7 @@ function InputForm({ isStartup }: InputFormProps) {
   const [input, setInput] = React.useState<string>("");
 
   // message store
-  const { messages, setMessages, updateMessages } = useMessagesStore();
+  const { setMessages, updateMessages } = useMessagesStore();
 
   const handleInput = (data: any) => {
     const element = textAreaRef.current;
@@ -36,30 +36,20 @@ function InputForm({ isStartup }: InputFormProps) {
   const getAssistantMessage = async (message: string) => {
     setInput("");
 
-    let final = "";
-
     const id = setMessages("", "assistant", Status.PENDING);
 
     try {
-      const response = await chatStreamAsync(
-        {
-          message: message,
-          history: messages,
-          namespace: "marketing",
-          role: "assistant",
-        },
-        (chunk: any) => {
-          final += chunk.data;
-
-          if (chunk.type === "text") {
-            updateMessages(id, { message: final, status: Status.RECEIVING });
-          }
-        }
-      );
+      const response = await chatStreamAsync({
+        content: message,
+        role: "assistant",
+      });
 
       if (response.success) {
         console.log(response.message);
-        updateMessages(id, { status: Status.COMPLETE });
+        updateMessages(id, {
+          message: response.message?.content?.toString(),
+          status: Status.COMPLETE,
+        });
       }
     } catch (error) {
       throw new Error(`API responded with status: ${error}`);

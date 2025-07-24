@@ -1,55 +1,34 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { MessageBody } from "@/utils/contracts";
+import { client } from "@/utils/client";
+import { ChatCompletionMessage } from "openai/resources/index.mjs";
 
-export const chatStreamAsync = async (message: MessageBody, onMessage: (chunk: any) => void): Promise<{ success: boolean; message: string; error?: string }> => {
+export const chatStreamAsync = async (message: any): Promise<{ success: boolean; message?: ChatCompletionMessage; error?: string }> => {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_ROOT_URL!}/api/v1/chat/stream`, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-                message: message.message,
-                chat_history: message.history.toString(),
-                namespace: message.namespace,
-                role: message.role,
-            }),
-        });
+        const response = await client.chat.completions.create({
+            model: "grok-3",
+            messages: [
+                {
+                    role: message.role,
+                    content: message.content
+                }
+            ]
+        })
 
-        if (!response.body) {
-            throw new Error(`API responded with status: ${response.status}`);
-        }
-
-        const reader = response.body.getReader();
-
-        if (!reader) {
-            throw new Error("Readable stream not supported");
-        }
-
-        const decoder = new TextDecoder("utf-8");
-
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-                break
-            }
-            const chunk = decoder.decode(value, { stream: true });
-
-            onMessage({ type: "text", data: chunk });
+        if (!response.choices[0].message) {
+            throw new Error(String(response));
         }
 
         return {
             success: true,
-            message: "Message sent successfully",
+            message: response.choices[0].message,
         };
 
     } catch (error) {
         console.error("createMessagesByAsync error:", error);
         return {
             success: false,
-            message: "Something went wrong",
             error: error instanceof Error ? error.message : "Unknown error",
         };
     }

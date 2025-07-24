@@ -21,10 +21,10 @@ function AssistantMessage({ message, role, status }: AssistantMessageProps) {
     >
       <div
         dir="auto"
-        className="min-h-7 rounded-3xl break-words text-primary w-full max-w-none border-0 px-4 py-2.5 opacity-100"
+        className="min-h-7 rounded-3xl break-words text-primary w-full max-w-none border-0 @sm:px-4 @2xs:px-2 py-2.5 opacity-100"
       >
         <div className="[&_a]:text-primary [&_a:hover]:underline">
-          <p
+          <span
             dir="auto"
             className="break-words"
             style={{ whiteSpace: "pre-wrap" }}
@@ -34,47 +34,50 @@ function AssistantMessage({ message, role, status }: AssistantMessageProps) {
             ) : (
               <Markdown>{message}</Markdown>
             )}
-          </p>
+          </span>
+          {/* <GenMessages /> */}
         </div>
       </div>
       <div className="flex flex-row flex-wrap w-full justify-between md:px-3">
-        <div
-          className="flex items-center gap-[3px] w-max rounded-lg text-xs bg-background pb-2 px-2 start-0 md:start-4 -ml-4"
-          style={{ bottom: "128px" }}
-        >
-          <Button
-            type="button"
-            variant={"ghost"}
-            className="rounded-full p-1.5"
-            aria-label="Regenerate message"
+        {status === Status.COMPLETE && (
+          <div
+            className="flex items-center gap-[3px] w-max rounded-lg text-xs bg-background pb-2 px-2 start-0 md:start-4 -ml-4"
+            style={{ bottom: "128px" }}
           >
-            <RefreshCcw />
-          </Button>
-          <Button
-            type="button"
-            variant={"ghost"}
-            className="rounded-full p-1.5"
-            aria-label="Copy message"
-          >
-            <Copy />
-          </Button>
-          <Button
-            type="button"
-            variant={"ghost"}
-            className="rounded-full p-1.5"
-            aria-label="Like message"
-          >
-            <ThumbsUp />
-          </Button>
-          <Button
-            type="button"
-            variant={"ghost"}
-            className="rounded-full p-1.5"
-            aria-label="Dislike message"
-          >
-            <ThumbsDown />
-          </Button>
-        </div>
+            <Button
+              type="button"
+              variant={"ghost"}
+              className="rounded-full p-1.5"
+              aria-label="Regenerate message"
+            >
+              <RefreshCcw />
+            </Button>
+            <Button
+              type="button"
+              variant={"ghost"}
+              className="rounded-full p-1.5"
+              aria-label="Copy message"
+            >
+              <Copy />
+            </Button>
+            <Button
+              type="button"
+              variant={"ghost"}
+              className="rounded-full p-1.5"
+              aria-label="Like message"
+            >
+              <ThumbsUp />
+            </Button>
+            <Button
+              type="button"
+              variant={"ghost"}
+              className="rounded-full p-1.5"
+              aria-label="Dislike message"
+            >
+              <ThumbsDown />
+            </Button>
+          </div>
+        )}
       </div>
       <div
         style={{

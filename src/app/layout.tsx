@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import SidebarPrimary from "@/components/sidebar";
+import MessageBodyWrapper from "@/components/message-body-wrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -34,10 +34,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="w-full min-h-svh flex">
-            <SidebarPrimary />
-            {children}
-          </div>
+          <MessageBodyWrapper>{children}</MessageBodyWrapper>
         </ThemeProvider>
       </body>
     </html>
